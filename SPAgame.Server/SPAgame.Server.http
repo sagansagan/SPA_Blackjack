@@ -1,0 +1,6 @@
+@SPAgame.Server_HostAddress = http://localhost:5215
+
+GET {{SPAgame.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
