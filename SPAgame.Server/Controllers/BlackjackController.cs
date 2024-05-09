@@ -28,7 +28,7 @@ namespace SPAgame.Server.Controllers
         public async Task<IActionResult> StartGame()
         {
 
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = (User.FindFirst(ClaimTypes.NameIdentifier)?.Value) ?? throw new ArgumentNullException("userId");
             var user = await _context.Users.FindAsync(userId);
 
             if (user == null) return NotFound();
@@ -40,9 +40,6 @@ namespace SPAgame.Server.Controllers
                 PlayerHand = new PlayerHand(),
                 DealerHand = new DealerHand(),
             };
-
-            //game.PlayerHand = new PlayerHand { BlackjackGame = game};
-            //game.DealerHand = new DealerHand { BlackjackGame = game };
 
             // Lägg till kort till spelaren och dealerns händer
             game.PlayerHand.Cards.Add(_deckService.DrawCard());
@@ -57,6 +54,37 @@ namespace SPAgame.Server.Controllers
 
 
         }
+
+        //[HttpPost("hit")]
+        //public async Task<IActionResult> Hit()
+        //{
+        //    var userId = GetLoggedInUserId();
+        //    var game = await GetInProgressGameForUser(userId);
+
+        //    if (game == null) return NotFound("No in-progress game found.");
+
+        //    // Dra ett kort till spelarens hand
+        //    var drawnCard = _deckService.DrawCard();
+        //    game.PlayerHand.Cards.Add(drawnCard);
+
+        //    // Kontrollera spelets status
+        //    int playerValue = CalculateHandValue(game.PlayerHand.Cards);
+
+        //    if (playerValue > 21)
+        //    {
+        //        game.Status = "Lose";
+        //    }
+        //    else if (playerValue == 21)
+        //    {
+        //        game.Status = "Win";
+        //        UpdateHighScore(game);
+        //    }
+
+        //    // Spara ändringar i databasen
+        //    await _dbContext.SaveChangesAsync();
+
+        //    return Ok(game);
+        //}
 
         //private async Task<BlackjackGame> GetInProgressGameForUser(int userId)
         //{
@@ -135,7 +163,7 @@ namespace SPAgame.Server.Controllers
             }
         }
 
-
+        
     }
 
 }

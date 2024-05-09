@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Login from './components/Login';
+import Register from './components/Register';
+import Home from './components/Home';
 
 function App() {
     
@@ -13,11 +15,7 @@ function App() {
     return (
         <div className="wrapper">
         <h1>Application</h1>
-        <Router>
-          <Routes>
-          <Route path="/login" element={<Login/>} />
-          </Routes>
-        </Router>
+        <Home/>
       </div>
     );
     
