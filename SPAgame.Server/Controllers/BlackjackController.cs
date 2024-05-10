@@ -55,46 +55,95 @@ namespace SPAgame.Server.Controllers
 
         }
 
-        //[HttpPost("hit")]
-        //public async Task<IActionResult> Hit()
-        //{
-        //    var userId = GetLoggedInUserId();
-        //    var game = await GetInProgressGameForUser(userId);
+        [HttpPost("hit")]
+        public async Task<IActionResult> Hit()
+        {
+            var userClaim = (User.FindFirst(ClaimTypes.NameIdentifier)?.Value) ?? throw new ArgumentNullException("userId");
+            var user = await _context.Users.FindAsync(userClaim);
 
-        //    if (game == null) return NotFound("No in-progress game found.");
+            if (user == null) return NotFound();
 
-        //    // Dra ett kort till spelarens hand
-        //    var drawnCard = _deckService.DrawCard();
-        //    game.PlayerHand.Cards.Add(drawnCard);
+            var game = await GetInProgressGameForUser(user.Id);
 
-        //    // Kontrollera spelets status
-        //    int playerValue = CalculateHandValue(game.PlayerHand.Cards);
+            if (game == null) return NotFound("No in-progress game found.");
 
-        //    if (playerValue > 21)
-        //    {
-        //        game.Status = "Lose";
-        //    }
-        //    else if (playerValue == 21)
-        //    {
-        //        game.Status = "Win";
-        //        UpdateHighScore(game);
-        //    }
+            // Dra ett kort till spelarens hand
+            var drawnCard = _deckService.DrawCard();
+            game.PlayerHand.Cards.Add(drawnCard);
 
-        //    // Spara ändringar i databasen
-        //    await _dbContext.SaveChangesAsync();
+            // Kontrollera spelets status
+            int playerValue = CalculateHandValue(game.PlayerHand.Cards);
 
-        //    return Ok(game);
-        //}
+            if (playerValue > 21)
+            {
+                game.Status = "Lose";
+            }
+            else if (playerValue == 21)
+            {
+                game.Status = "Win";
+                UpdateHighScore(game);
+            }
 
-        //private async Task<BlackjackGame> GetInProgressGameForUser(int userId)
-        //{
-        //    return await _context.BlackjackGames
-        //        .Include(bg => bg.PlayerHand)
-        //        .ThenInclude(ph => ph.Cards)
-        //        .Include(bg => bg.DealerHand)
-        //        .ThenInclude(dh => dh.Cards)
-        //        .FirstOrDefaultAsync(bg => bg.Player == userId && bg.Status == "In Progress");
-        //}
+            // Spara ändringar i databasen
+            await _context.SaveChangesAsync();
+
+            return Ok(game);
+        }
+
+        [HttpPost("stand")]
+        public async Task<IActionResult> Stand()
+        {
+            var userClaim = (User.FindFirst(ClaimTypes.NameIdentifier)?.Value) ?? throw new ArgumentNullException("userId");
+            var user = await _context.Users.FindAsync(userClaim);
+
+            if (user == null) return NotFound();
+
+            var game = await GetInProgressGameForUser(user.Id);
+
+            if (game == null) return NotFound("No in-progress game found.");
+
+            // Dealern drar kort enligt reglerna tills handvärdet är minst 17
+            int dealerValue = CalculateHandValue(game.DealerHand.Cards);
+            while (dealerValue < 17)
+            {
+                var drawnCard = _deckService.DrawCard();
+                game.DealerHand.Cards.Add(drawnCard);
+                dealerValue = CalculateHandValue(game.DealerHand.Cards);
+            }
+
+            // Kontrollera spelets resultat
+            int playerValue = CalculateHandValue(game.PlayerHand.Cards);
+
+            if (dealerValue > 21 || playerValue > dealerValue)
+            {
+                game.Status = "Win";
+                UpdateHighScore(game);
+            }
+            else if (playerValue == dealerValue)
+            {
+                game.Status = "Draw";
+            }
+            else
+            {
+                game.Status = "Lose";
+            }
+
+            // Spara ändringar i databasen
+            await _context.SaveChangesAsync();
+
+            return Ok(game);
+        }
+
+        private async Task<BlackjackGame> GetInProgressGameForUser(string userId)
+        {
+            return await _context.BlackjackGames
+                .Include(bg => bg.PlayerHand)
+                .ThenInclude(ph => ph.Cards)
+                .Include(bg => bg.DealerHand)
+                .ThenInclude(dh => dh.Cards)
+                .Include(bg => bg.Player)
+                .FirstOrDefaultAsync(bg => bg.Player.Id == userId && bg.Status == "In Progress");
+        }
 
         private int CalculateHandValue(ICollection<Card> hand)
         {
@@ -155,7 +204,7 @@ namespace SPAgame.Server.Controllers
 
         private void UpdateHighScore(BlackjackGame game)
         {
-            var player = _context.Users.Find(game.Player);
+            var player = _context.Users.Find(game.Player.Id);
             if (player != null && game.Status == "Win")
             {
                 player.HighScore++;
