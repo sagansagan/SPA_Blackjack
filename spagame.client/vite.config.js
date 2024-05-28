@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
-import plugin from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
 import child_process from 'child_process';
@@ -35,7 +35,7 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [plugin()],
+    plugins: [react()],
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -43,10 +43,6 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/weatherforecast': {
-                target,
-                secure: false
-            },
             '^/register': {
                 target,
                 secure: false
@@ -56,6 +52,14 @@ export default defineConfig({
                 secure: false
             },
             '^/logout': {
+                target,
+                secure: false
+            },
+            '^/users': {
+                target,
+                secure: false
+            },
+            '^/api': {
                 target,
                 secure: false
             }

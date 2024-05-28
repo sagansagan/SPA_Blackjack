@@ -31,7 +31,17 @@ namespace SPAgame.Server
             builder.Services.AddIdentityApiEndpoints<AppUser>()
                 .AddEntityFrameworkStores<AppDbContext>();
 
-            builder.Services.AddControllers();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins",
+                    builder =>
+                    {
+                        builder.WithOrigins("https://localhost:5173")
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
@@ -68,12 +78,18 @@ namespace SPAgame.Server
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseDeveloperExceptionPage();
             }
+
+            app.UseRouting();
+
+            app.UseCors("AllowSpecificOrigins");
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

@@ -1,19 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 function Login(props) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     
-    const handleLogin = async (e) => {
+    const onLogin = async (e) => {
         e.preventDefault();
 
         try {
         
             const response = await axios.post('/login', { email, password });
 
-            // Om inloggningen är framgångsrik, navigera till app-sidan
+            // Om inloggningen är framgångsrik, navigera till spel-sidan
             console.log('Login successful');
+            const token = response.data.accessToken;
+            localStorage.setItem('authToken', token);
+            window.location.href = "/blackjack";
         } catch (error) {
             console.error('Login failed:', error);
         }
@@ -21,10 +24,10 @@ function Login(props) {
 
 
     return (
-        <section className='login-page-wrapper'>
+        <section className='auth-form-container'>
         <div>
             <h2>Login</h2>
-            <form onSubmit={handleLogin}>
+            <form className='login-form' onSubmit={onLogin}>
                 <div>
                     <label>Email:</label>
                     <input
@@ -45,7 +48,7 @@ function Login(props) {
             </form>
             <p>
                 Don't have an account? 
-                <button onClick={() => props.onFormSwitch('register')}>Register</button>
+                <button className='switch-button' onClick={() => props.onFormSwitch('register')}>Register</button>
             </p>
         </div>
         </section>

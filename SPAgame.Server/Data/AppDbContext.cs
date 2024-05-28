@@ -14,6 +14,7 @@ namespace SPAgame.Server.Data
         public DbSet<Card> Cards { get; set; }
         public DbSet<PlayerHand> PlayerHands { get; set; }
         public DbSet<DealerHand> DealerHands { get; set; }
+        public DbSet<HighScore> HighScores { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

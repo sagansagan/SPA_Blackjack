@@ -23,9 +23,10 @@ function Register(props) {
 
     
     return (
+        <section className='auth-form-container'>
         <div>
             <h2>Register</h2>
-            <form onSubmit={handleRegister}>
+            <form className='register-form'onSubmit={handleRegister}>
                 <div>
                     <label>Email:</label>
                     <input
@@ -44,9 +45,12 @@ function Register(props) {
                     </div>
                     <button type="submit">Register</button>
                 </form>
-                <button onClick={() => props.onFormSwitch('login')}>Login</button>
-                
+                <p>
+                Already have an account?
+                <button className='switch-button' onClick={() => props.onFormSwitch('login')}>Login</button>
+                </p>
         </div>
+        </section>
     );
     
 

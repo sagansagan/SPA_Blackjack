@@ -34,6 +34,10 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  margin-top: 0.5em;
+}
+p{
+  color: white;
 }
 
 button {
@@ -46,14 +50,95 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  margin: 1rem;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: black;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+nav {
+  background-color: black;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 0 25px 0 black;
+  padding: 10px 20px;
+  z-index: 1000;
+}
+
+nav * {
+  display: inline;
+}
+
+nav li {
+  margin: 20px;
+}
+
+nav li a {
+  color: white;
+  text-decoration: none;
+}
+.home-wrapper, .profile-wrapper{
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ color: #1a1a1a;
+ width: 100vw;
+ padding-top: 80px;
+}
+.login-page{
+  display: flex;
+  justify-content: center;
+  width: 100vw;
+}
+.auth-form-container, .login-form, .register-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #242424;
+  color: white;
+  border-radius: 20%;
+  justify-content: space-between;
+  padding: 2em;
+  
+}
+
+input{
+  background: white transparent;
+  padding: 0.5rem;
+  margin: 0.5rem;
+}
+.switch-button, .continue-button{
+  background: none;
+  color: white;
+  text-decoration: underline;
+  border: none;
+}
+.home-content{
+  display: flex;
+  align-items: center;
+  background-color: rgba(74, 19, 95, 0.384);
+  border-radius: 5%;
+  padding: 2.5em;
+}
+.game-wrapper{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100vw;
+  color: white;
+  padding-top: 90px;
+}
+.home-content li{
+  font-size: 1.1em;
+  color: white;
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {
