@@ -10,16 +10,17 @@ function Blackjack() {
         fetchInProgressGames();
     }, []);
 
+    const getAuthToken = () => {
+        const token = localStorage.getItem('authToken');
+        if (!token) throw new Error('No authentication token found.');
+        return token;
+    };
+
     const fetchInProgressGames = async () => {
         try {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                throw new Error('Ingen autentiseringstoken funnen.');
-            }
+            const token = getAuthToken();
             const response = await axios.get('api/blackjack/inprogress', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` },
             });
             setInProgressGames(response.data);
         } catch (error) {
@@ -30,35 +31,27 @@ function Blackjack() {
 
     const startGame = async () => {
         try {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-              throw new Error('Ingen autentiseringstoken funnen.');
-            }
+            const token = getAuthToken();
             const response = await axios.post('api/blackjack/start', {}, {
                 headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type" : "application/json",
-                  "Accept": "application/json"
-                }
-              });
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                },
+            });
             setGame(response.data);
             fetchInProgressGames();
-            console.log('game started:', response.data);
-          } catch (error) {
+            console.log('Game started:', response.data);
+        } catch (error) {
             console.error('Error starting game:', error);
-          }
+        }
       };
 
       const continueGame = async (gameId) => {
         try {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                throw new Error('Ingen autentiseringstoken funnen.');
-            }
+            const token = getAuthToken();
             const response = await axios.get(`api/blackjack/${gameId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
+                headers: { Authorization: `Bearer ${token}` },
             });
             setGame(response.data);
             console.log('Continuing game:', response.data);
@@ -70,16 +63,13 @@ function Blackjack() {
       const handleAction = async (action) => {
         if (!game) return;
         try {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                throw new Error('Ingen autentiseringstoken funnen.');
-            }
+            const token = getAuthToken();
             const response = await axios.post(`api/blackjack/${action}/${game.id}`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
+                    "Accept": "application/json",
+                },
             });
             setGame(response.data);
             if (response.data.status !== 'In Progress') {
