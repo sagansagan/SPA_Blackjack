@@ -22,30 +22,33 @@ Make sure you have the following:
 1. Update the connection string in appsettings.json to point to your database. The default configuration uses SQL Server.
 2. Apply migrations to create the database schema.
 
-That is all.
+   That is all.
 
 ## Project Structure
-
-SPAgame.Client/: Contains the React frontend application.
-SPAgame.Server/: Contains the ASP.NET Core backend application.
-Controllers/: ASP.NET controllers for handling API requests.
-Data/: Contains Entity Framework DbContext and migrations.
-Models/: Entity classes and data models.
+<ul>
+ <li>SPAgame.Client/: Contains the React frontend application.</li>
+ <li>SPAgame.Server/: Contains the ASP.NET Core backend application.</li>
+ <li>Controllers/: ASP.NET controllers for handling API requests.</li>
+ <li>Data/: Contains Entity Framework DbContext and migrations.</li>
+ <li>Models/: Entity classes and data models.</li>
+</ul>
 
 ## Features 
-
-Blackjack Game: Play a full-featured game of Blackjack.
-Highscore List: Displays top players based on wins and games played. 
-Authentication and Authorization: Uses ASP.NET Identity for user management.
-Entity Framework: For database operations.
-React Frontend: Modern single-page application (SPA) using React.
-Protected Routes: Certain routes are accessible only to authenticated users.
+<ul>
+    <li>Blackjack Game: Play a full-featured game of Blackjack.</li>
+    <li>Highscore List: Displays top players based on wins and games played. </li>
+    <li>Authentication and Authorization: Uses ASP.NET Identity for user management.</li>
+    <li>Entity Framework: For database operations.</li>
+    <li>React Frontend: Modern single-page application (SPA) using React.</li>
+    <li>Protected Routes: Certain routes are accessible only to authenticated users.</li>
+</ul>
 
 ## Technologies Used
-
-.NET 8: Backend framework.
-ASP.NET Core: Web framework for building web applications.
-Entity Framework Core: ORM for database management.
-ASP.NET Identity: Authentication and authorization.
-React: Frontend framework for building user interfaces.
-SQL Server: Default database (can be changed in configuration).
+<ul>
+    <li>.NET 8: Backend framework.</li>
+    <li>ASP.NET Core: Web framework for building web applications.</li>
+    <li>Entity Framework Core: ORM for database management.</li>
+    <li>ASP.NET Identity: Authentication and authorization.</li>
+    <li>React: Frontend framework for building user interfaces.</li>
+    <li>SQL Server: Default database (can be changed in configuration).</li>
+</ul>
