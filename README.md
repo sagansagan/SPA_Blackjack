@@ -26,7 +26,7 @@ Make sure you have the following:
 
 ## Project Structure
 <ul>
- <li>**SPAgame.Client/:** Contains the React frontend application.</li>
+ <li>__SPAgame.Client/:__ Contains the React frontend application.</li>
  <li>**SPAgame.Server/:** Contains the ASP.NET Core backend application.</li>
  <li>**Controllers/: ASP.NET** controllers for handling API requests.</li>
  <li>**Data/:** Contains Entity Framework DbContext and migrations.</li>
